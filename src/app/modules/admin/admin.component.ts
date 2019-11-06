@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MaterialIconName } from './../../../material-icon-names';
 
 @Component({
   selector: 'app-admin',

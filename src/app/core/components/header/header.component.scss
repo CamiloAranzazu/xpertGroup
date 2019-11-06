@@ -1,0 +1,34 @@
+:host {
+  header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        .icon {
+            top: 12px;
+            font-size: 33px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 33px;
+            text-decoration: none;
+            color: #38384A;
+            font-family: "Roboto", sans-serif;
+        }
+        .btn {
+            cursor: pointer;
+            color: white;
+            background-image: linear-gradient(284deg, #1cc7d0, #2dde98);
+            color: white;
+            border-radius: 20px;
+            padding: 2px 30px !important;
+            height: 30px;
+            line-height: 28px;
+            display: inline-block;
+            &:hover {
+                background-color: #00aeff;
+                background-image: linear-gradient(80deg, #00aeff, #3369e7);
+                box-shadow: 0 4px 12px rgba(51, 105, 231, 0.55)
+            }
+        } 
+    }
+}
