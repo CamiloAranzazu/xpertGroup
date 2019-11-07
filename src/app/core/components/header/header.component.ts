@@ -12,4 +12,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
+  Pageme() {
+    window.open('https://mypage-ea25e.firebaseapp.com/', "_blank");
+  }
 }
