@@ -5,6 +5,7 @@ import { AdminComponent } from './admin.component';
 import { AdminRoutingModule } from './admin-routing-module';
 import { CoreModule } from 'src/app/core/core.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [FilesComponent, AdminComponent],
@@ -12,7 +13,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule,
     AdminRoutingModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class AdminModule { }

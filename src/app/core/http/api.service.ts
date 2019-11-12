@@ -34,10 +34,11 @@ export class ApiService {
       ...(config.default_headers || {}),
       ...{
         Accept: 'application/json',
-        // 'Content-Type': 'application/json'
       }
     };
-    if (!isNullOrUndefined(config.key)) headers['app-key'] = config.key;
+    if (!isNullOrUndefined(config.key)) {
+      headers['app-key'] = config.key;
+    }
     this.headers = new HttpHeaders(headers);
   }
 
@@ -87,8 +88,9 @@ export class ApiService {
         (event: any) => {
           // progress
           if (event.type === HttpEventType.DownloadProgress) {
-            if (!event.total) console.warn('No Content-Length header provided');
-            else {
+            if (!event.total) {
+              console.warn('No Content-Length header provided');
+            } else {
               let percentage = (100 / event.total) * event.loaded;
               // console.log(`progress: ${percentage}`);
             }

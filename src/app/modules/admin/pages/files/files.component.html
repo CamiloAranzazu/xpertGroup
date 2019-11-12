@@ -1,8 +1,15 @@
-<div    class="fab-container"
-        [routerLink]="[ '/home/start' ]"
-        matTooltip="Inicio"
-        matTooltipPosition="above">
+<div class="fab-container" [routerLink]="[ '/home/start' ]" matTooltip="Inicio" matTooltipPosition="above">
     <div class="fab-icon-holder">
         <mat-icon>undo</mat-icon>
     </div>
+</div>
+<div class="Files">
+    <form *ngIf="myForm" [formGroup]="myForm">
+        <div>
+            <input type="file" #Image (change)="fileInput($event.target.files)">
+        </div>
+    </form>
+    <button (click)="ImageAdd(Image)">ADD</button>
+
+    <button (click)="GetDataFiles()">GET</button>
 </div>

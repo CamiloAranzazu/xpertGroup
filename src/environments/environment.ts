@@ -3,14 +3,13 @@ import { JsendResponse } from './../app/core/http/http.types';
 export const environment = {
   production: false,
   api: {
-    url: 'http://localhost:4230/api',
+    url: 'https://localhost:44327/api',
     parsers: {
       apiResponses: null,
       // (response: HttpResponse<any>) => {
       // },
       loginResponse: (response = {} as JsendResponse) => {
         const obj = response.data || {};
-       
         const result: JsendResponse = {
           ...response,
         };
