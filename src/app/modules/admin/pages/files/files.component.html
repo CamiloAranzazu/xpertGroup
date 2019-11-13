@@ -1,3 +1,4 @@
+<mat-divider></mat-divider>
 <div class="fab-container" [routerLink]="[ '/home/start' ]" matTooltip="Inicio" matTooltipPosition="above">
     <div class="fab-icon-holder">
         <mat-icon>undo</mat-icon>
@@ -5,11 +6,44 @@
 </div>
 <div class="Files">
     <form *ngIf="myForm" [formGroup]="myForm">
-        <div>
-            <input type="file" #Image (change)="fileInput($event.target.files)">
+        <div class="control">
+            <label class="card-title" for="model">Cargar archivos</label>
+            <div class="estilo">
+                <p>{{nameFile}}
+                    <mat-icon>launch</mat-icon>
+                </p>
+                <input #Image class="file" type="file" accept='.txt' (change)="fileInput($event.target.files)" />
+            </div>
         </div>
     </form>
-    <button (click)="ImageAdd(Image)">ADD</button>
+    <div class="btn" (click)="ImageAdd(Image)">
+        Guardar Archivo
+    </div>
+    <div *ngIf="save">
+        Archivo {{nameFile}} Guardado!
+    </div>
+</div>
 
-    <button (click)="GetDataFiles()">GET</button>
+<mat-divider></mat-divider>
+
+<div class="data">
+    <div class="btn" (click)="GetDataFiles()">
+        Generar Resultados
+    </div>
+    <div *ngIf="respuesta" class="respuesta">
+        <span *ngFor="let res of respuesta || []" class="dataItem">
+            <span class="item">
+                {{res}}
+            </span>
+        </span>
+        <div class="btn" (click)="SaveResult()">
+            Guardar RESULTADOS.txt
+        </div>
+    </div>
+    <div *ngIf="contenido" class="not_contenido">
+        Falta subir el archivo CONTENIDO.txt
+    </div>
+    <div *ngIf="registrados" class="not_registrados">
+        Falta subir el archivo REGISTRADO.txt
+    </div>
 </div>

@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { ContenidoLetra } from '../class/ContenidoLetra';
 import { Estado } from '../class/Estado';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -16,15 +15,21 @@ export class FilesService {
               ) { }
 
   postFile(fileUpload: File) {
-    const options: RequestOptions = {};
-    const formData: FormData = new FormData();
+    let options: RequestOptions = {};
+    let formData: FormData = new FormData();
     formData.append('Image', fileUpload, fileUpload.name);
     options.body = formData;
     return this.rest.post('/UploadFile', options);
   }
 
+  postResult(resultados: any) {
+    let options: RequestOptions = {};
+    options.body = resultados;
+    return this.rest.post('/UploadResult', options);
+  }
+
   getDataFiles() {
-    const options: RequestOptions = {};
+    let options: RequestOptions = {};
     return this.rest.get('/GetDataFile', options);
   }
 
@@ -45,8 +50,7 @@ export class FilesService {
 
       let existeLaPalabra: boolean = true;
     
-      for (let i = 0; i < letters.length; i++)
-      {
+      for (let i = 0; i < letters.length; i++) {
         let letter: any = letters[i];
         let encontrado: boolean = false;
         for (let j = 0; j < letras.length; j++)
