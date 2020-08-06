@@ -1,0 +1,169 @@
+@import 'theming';
+@import 'functions';
+@import 'mixins';
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  transition: $base_transition;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  height: 100%;
+}
+body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+h1 {
+  font-family: $title-font;
+}
+h2,
+h3,
+h4,
+h5,
+h6,
+a {
+  margin: 0;
+  color: get-color($base-text);
+  text-decoration: none;
+}
+
+h2 {
+  font-size: 42px;
+  font-weight: 200;
+  font-family: $title-font;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 100;
+  font-family: $title-font;
+}
+
+h3 {
+  font-size: 30px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: 18px;
+}
+
+h6 {
+  font-size: 16px;
+}
+
+.image-responsive {
+  box-sizing: border-box;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.mat-form-field-infix {
+  padding-top: 0.8em !important;
+  width: 100% !important;
+}
+.mat-form-field-prefix {
+  margin-right: 20px !important;
+}
+
+.mat-mini-fab mgx-icon {
+  font-size: 24px !important;
+}
+
+button[disabled] {
+  cursor: not-allowed !important;
+}
+
+@each $color_name, $color_value in $colors {
+  button.mat-#{$color_name},
+  .mat-badge-#{$color_name} .mat-badge-content,
+  .mat-bg-#{$color_name},
+  .box-#{$color_name} {
+    color: get-color($color_name, 1, true) !important;
+    &:not(.transparent) {
+      background: $color_value !important;
+    }
+    &.outline,
+    &.mat-stroked-button {
+      background: transparent !important;
+      &:not(.no-border) {
+        border: 1px solid $color_value !important;
+      }
+      color: $color_value !important;
+    }
+    @for $i from 1 through 99 {
+      &.solid-#{$i} {
+        background: rgba($color_value, $i/100) !important;
+      }
+    }
+    .mat-ripple-element {
+      background-color: rgba($color_value, 0.2) !important;
+    }
+    mgx-icon mat-icon {
+      color: get-color($color_name, 1, true) !important;
+      ::ng-deep {
+        path {
+          stroke: map_get($colors, $color_name);
+        }
+      }
+    }
+  }
+
+  .mgx-icon-#{$color_name},
+  .mgx-icon-#{$color_name} mat-icon,
+  mat-icon.mat-#{$color_name},
+  &.mat-text-#{$color_name},
+  .mat-text-#{$color_name} {
+    color: map_get($colors, $color_name) !important;
+  }
+
+  .mgx-icon-#{$color_name} {
+    path {
+      stroke: map_get($colors, $color_name);
+    }
+
+    ::ng-deep {
+      path {
+        stroke: map_get($colors, $color_name);
+      }
+    }
+  }
+
+  .util-snackbar-#{$color_name} {
+    border-radius: 100px !important;
+    margin-top: 90px !important;
+    padding: 20px !important;
+    background: rgba($color_value, 0.8) !important;
+    .mat-simple-snackbar-action {
+      border-radius: 100px !important;
+      background: get-color($color_name, 0.8, true) !important;
+      color: rgba($color_value, 0.8) !important;
+    }
+  }
+}
+
+// check fixes
+.cdk-overlay-pane.mat-datetimepicker-popup {
+  @include flex(column, center, center);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: get-color('dark', 0.5);
+}

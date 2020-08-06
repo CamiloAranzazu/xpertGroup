@@ -1,0 +1,53 @@
+@import '~@angular/material/theming';
+@import url('https://fonts.googleapis.com/css?family=Lato:300|Roboto');
+
+$base-text: 'dark';
+
+$base-transition: 0.35s ease-in;
+$base-radius: 6px;
+$title-font: 'Roboto', sans-serif;
+$content-font: 'Lato', sans-serif;
+
+$colors: (
+  primary: #4070e0,
+  accent: #af60e0,
+  info: #4078c6,
+  warning: #e0cd88,
+  danger: #e0334c,
+  success: #60a08f,
+  gray: #727085,
+  light: #eae5f5,
+  dark: #242330,
+  header-light: #fe8c00,
+  header-dark: #e45832,
+  header-menu: #FA1825,
+  icon-menu: #404F70,
+  heard-dialog-dark: #404F70,
+  heard-dialog-light: rgb(84, 101, 139),
+);
+
+$contrasts: (
+  primary: #eae5f5,
+  accent: #eae5f5,
+  info: #eae5f5,
+  warning: #eae5f5,
+  danger: #eae5f5,
+  success: #eae5f5,
+  gray: #eae5f5,
+  light: #242330,
+  dark: #eae5f5,
+  header-light: #eae5f5,
+  header-dark: #eae5f5,
+  header-menu: #eae5f5,
+  icon-menu: #eae5f5,
+  heard-dialog-dark: #eae5f5,
+  heard-dialog-light: #eae5f5
+);
+
+$sizes: (
+  xs: 360px,
+  sm: 480px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1440px
+);

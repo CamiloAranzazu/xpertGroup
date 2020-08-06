@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../http/api.service';
 import { RequestOptions } from '../http/http.types';
 import { HttpClient } from '@angular/common/http';
-import { ContenidoLetra } from '../class/ContenidoLetra';
-import { Estado } from '../class/Estado';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilesService {
+
+  tiempoService: any = '';
 
   constructor(private rest: ApiService,
               private http: HttpClient,
@@ -22,70 +23,146 @@ export class FilesService {
     return this.rest.post('/UploadFile', options);
   }
 
-  postResult(resultados: any) {
-    let options: RequestOptions = {};
-    options.body = resultados;
-    return this.rest.post('/UploadResult', options);
-  }
-
   getDataFiles() {
     let options: RequestOptions = {};
     return this.rest.get('/GetDataFile', options);
   }
 
-  DataResponse(contenido: any, registrados: any) {
-    let letras: ContenidoLetra[] = [];
+  DataResponse(conversacion: any) {
     let resultados: any[] = [];
-    contenido.forEach(item => {
-      let va = new ContenidoLetra();
-      va.letra = item;
-      letras.push(va);
+    conversacion.forEach(item => {
+      resultados.push(item);
     });
-    
-    for (let palabras = 0; palabras < registrados.length; palabras++) {
-      // console.log('registrados[palabras]', registrados[palabras]);
-    
-      let word: string = registrados[palabras];
-      let letters: any[] = word.split('');
-
-      let existeLaPalabra: boolean = true;
-    
-      for (let i = 0; i < letters.length; i++) {
-        let letter: any = letters[i];
-        let encontrado: boolean = false;
-        for (let j = 0; j < letras.length; j++)
-        {
-          if (this.existeLaLetra(letter, letras[j].getLetra()) && letras[j].getEstaUsada() === Estado.NO_USADO) {
-            letras[j].setEstaUsada(Estado.USADO);
-            encontrado = true;
-            break;
-          }
-
-        }
-
-        if (!encontrado) {
-          //console.log("No existe la letra:", letter);
-          existeLaPalabra = false;
-          break;
-        } else {
-          //console.log("Si existe la letra:",letter);
-        }
-      }
-      if (existeLaPalabra) {
-        resultados.push(word + " Si existe");
-        // console.log(word," Si existe");
-      } else {
-        resultados.push(word + " No existe");
-        // console.log(word, " No existe");
-      }
-    }
-
     // console.log('resultados', resultados);
     return resultados;
 
   }
 
-  existeLaLetra(letter: any, letterDelArray: any): boolean {
-    return letter == letterDelArray;
+  getTime(conversacion: any) {
+    let primerChat = conversacion[0];
+    let ultimoChat = conversacion.pop();
+    let start = primerChat.substring(0,8);
+    let end = ultimoChat.substring(0,8);
+    let b = moment('2001-01-01T'+start);//now
+    let a = moment('2001-01-01T'+end);
+    return  " HORAS: " +a.diff(b, 'hours') + " MINUTOS: " +a.diff(b, 'minutes') + " SEG: " +a.diff(b, 'seconds');
   }
+
+  calificacionDelServicio(conversacion: any) {
+    let es: number = -1;
+    let calificacion: number = 0;
+    conversacion.forEach(item => { 
+    let es = item.indexOf("EXCELENTE SERVICIO");
+      if (es !== -1){
+        return calificacion += 100; 
+     }
+    });
+    if (calificacion !== 100){
+      calificacion += this.primeraRegla(conversacion);
+      calificacion += this.segundaRegla(conversacion);
+      calificacion += this.terceraRegla(conversacion);
+      calificacion += this.cuartaRegla(conversacion);
+    }
+    console.log(calificacion);
+    return calificacion;
+  }
+
+  //   Obtener el número de mensajes enviados en la conversación, se identifican por un salto de
+  // línea [enter], los puntos se redistribuyen de la siguiente manera:
+  primeraRegla(conversacion: any){
+   let resultado: number = 0;
+   if (conversacion.length > 5) {
+      resultado += 10; 
+   } else if(conversacion.length <= 5) {
+      resultado += 20; 
+   }
+   return resultado;
+  }
+
+  // Número de coincidencias de la palabra URGENTE por registro:
+  segundaRegla(conversacion: any) {
+    let resultado: number = 0;
+    let countUrgente: number = 0;
+    let palabraUrgente = "URGENTE";
+
+    conversacion.forEach(item => {
+      let palabras = item.replace(".", "").split(" ");
+      palabras.forEach(pal => {
+        if(pal.replace(",", "").toLowerCase() === palabraUrgente.toLowerCase()){
+          countUrgente += 1;
+        }
+      });
+    });
+    if(countUrgente > 2) {
+      resultado = -10;
+    } else if(countUrgente <= 2) {
+      resultado = -5;
+    }
+    return resultado;
+  }
+
+  // Lista de palabras que exclaman el buen servicio en la conversación:
+  terceraRegla(conversacion: any) {
+    let resultado: number = 0;
+    conversacion.forEach(item => { 
+      let g = item.indexOf("Gracias");
+      if (g !== -1){
+         resultado += 10; 
+      }
+    });
+    conversacion.forEach(item => { 
+      let ba = item.indexOf("Buena Atención");
+      if (ba !== -1){
+        resultado += 10; 
+     }
+    });
+    conversacion.forEach(item => { 
+      let mg = item.indexOf("Muchas Gracias");
+      if (mg !== -1){
+        resultado += 10; 
+     }
+    });
+    return resultado;
+  }
+
+  // Cuánto tiempo duró la conversación expresada en minutos y segundos:
+  cuartaRegla(conversacion: any) {
+    let resultado: number = 0;
+
+    let primerChat = conversacion[0];
+    let ultimoChat = conversacion.pop();
+
+    let start = primerChat.substring(0,8);
+    let end = ultimoChat.substring(0,8);
+
+    let b = moment('2001-01-01T'+start);//now
+    let a = moment('2001-01-01T'+end);
+
+    this.tiempoService = " HORAS: " +a.diff(b, 'hours') + " MINUTOS: " +a.diff(b, 'minutes') + " SEG: " +a.diff(b, 'seconds')
+    if((a.diff(b, 'minutes')) >= 1) {
+      resultado += 25;
+    } else {
+      resultado += 50;
+    }
+    return resultado;
+  }
+
+  conteoEstrellas(calificaion: any) {
+    if (calificaion < 0) {
+      return "Sin Estrellas"
+    } else if (calificaion < 25) {
+      return " * "
+    } else if (calificaion >= 25 && calificaion < 50) {
+      return " ** "
+    } else if (calificaion >= 50 && calificaion < 75) {
+      return " *** "
+    } else if (calificaion >= 75 && calificaion < 90) {
+      return " **** "
+    } else if (calificaion >= 90) {
+      return " ***** "
+    } else {
+      return "Sin Estrellas"
+    }
+  }
+
 }

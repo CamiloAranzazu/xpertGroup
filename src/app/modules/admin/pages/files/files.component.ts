@@ -10,10 +10,13 @@ import { FilesService } from 'src/app/core/services/files.service';
 export class FilesComponent implements OnInit {
 
   myForm: FormGroup;
-  respuesta: any;
+  respuesta: any = [];
+  calificacion: any;
+  estrellas: any;
+  tiempo: any;
   fileUpload: File = null;
-  contenido: boolean = false;
-  registrados: boolean = false;
+  conversacion: boolean = false;
+  existFile: boolean = false;
   nameFile: string = 'Sin Archivo';
   save: boolean = false;
   constructor(  private fb: FormBuilder,
@@ -26,7 +29,7 @@ export class FilesComponent implements OnInit {
     });
   }
 
-  ImageAdd() {
+  AddFile() {
     if (this.fileUpload !== null) {
       this.fileService.postFile(this.fileUpload).then(data => {
         this.save = true;
@@ -43,26 +46,21 @@ export class FilesComponent implements OnInit {
 
   GetDataFiles() {
     this.fileService.getDataFiles().then(rest => {
-      if(rest[0] == 0) {
-       this.contenido = true;
-       this.registrados = false;
-       this.save = false;
-      } else if(rest[0] == 1) {
-        this.registrados = true;
-        this.contenido = false;
+      if(rest[0] === 1) {
+        this.existFile = true;
         this.save = false;
+      
+      } else if(rest[0].length === 1) {
+        this.conversacion = true;
       } else {
-          this.respuesta = this.fileService.DataResponse(rest[0], rest[1]);
-          this.contenido = false;
-          this.registrados = false;
+          this.respuesta = this.fileService.DataResponse(rest[0]);
+          this.calificacion = this.fileService.calificacionDelServicio(rest[0]);
+          this.estrellas = this.fileService.conteoEstrellas(this.calificacion);
+          this.tiempo = this.fileService.getTime(rest[0]);
+          this.conversacion = false;
       }
     });
   }
 
-  SaveResult() {
-    if(this.respuesta) {
-      this.fileService.postResult(this.respuesta);
-    }
-  }
 
 }

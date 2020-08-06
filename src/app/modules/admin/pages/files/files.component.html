@@ -16,7 +16,7 @@
             </div>
         </div>
     </form>
-    <div class="btn" (click)="ImageAdd(Image)">
+    <div class="btn" (click)="AddFile(Image)">
         Guardar Archivo
     </div>
     <div *ngIf="save">
@@ -31,19 +31,33 @@
         Generar Resultados
     </div>
     <div *ngIf="respuesta" class="respuesta">
-        <span *ngFor="let res of respuesta || []" class="dataItem">
+        <span *ngFor="let res of respuesta || [];let impar = odd;let par = even;" class="dataItem" [ngClass]="{azul:par,verde:impar}">
             <span class="item">
-                {{res}}
+                {{res || 'Sin reportes'}}
             </span>
         </span>
-        <div class="btn" (click)="SaveResult()">
-            Guardar RESULTADOS.txt
-        </div>
     </div>
-    <div *ngIf="contenido" class="not_contenido">
-        Falta subir el archivo CONTENIDO.txt
+    <div *ngIf="conversacion" class="respuesta">
+        <span class="dataItem">
+            <span class="item">
+                conversación categorizada como abandonada por solo tener una línea de conversación (-100 puntos).
+            </span>
+        </span>
     </div>
-    <div *ngIf="registrados" class="not_registrados">
-        Falta subir el archivo REGISTRADO.txt
+    <div *ngIf="respuesta.length > 0" class="respuesta">
+        <span class="dataItem">
+            <span class="item">
+               <span class="itemEstrella">{{estrellas || ''}}</span>
+        </span>
+        <span class="item">
+                CALIFICACION: {{calificacion || 0}}
+             </span>
+        <span class="item">
+                Duración => {{tiempo || 'Tiempo no reportado'}}
+             </span>
+        </span>
+    </div>
+    <div *ngIf="existFile" class="not_contenido">
+        Falta subir el archivo CONVERSACION.txt
     </div>
 </div>
